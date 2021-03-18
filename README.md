@@ -10,11 +10,11 @@
 [1712] 손익분기점  
 [2231] 분해합  
 [2292] 벌집  
-[2588] 곱셈(https://tristy.tistory.com/10)  
+[[2588] 곱셈](https://tristy.tistory.com/10)  
 [2798] 블랙잭  
 [2839] 설탕 배달  
 [2869] 달팽이는 올라가고 싶다  
-[2884] 알람 시계(https://tristy.tistory.com/11)  
+[[2884] 알람 시계](https://tristy.tistory.com/11)  
 [4344] 평균은 넘겠지  
 [4673] 셀프 넘버  
 [10250] ACM 호텔  
