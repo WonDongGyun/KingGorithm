@@ -1,4 +1,4 @@
-# 원동균 / 27조 / 15650
+# 원동균 / 27조 / 15650 / N과 M (2)
 # python itertools의 permutations와 combination에 대해 알아봅시다
 # permutations - 순열일 경우 사용합니다. 그래서 중복값이 나올 수 있습니다.
 # combination - 조합일 경우 사용합니다. 중복값이 나오지 않습니다.
