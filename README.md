@@ -1,5 +1,5 @@
 # KingGorithm
-**[트리스트의 알고리즘 노트에 오신 여러분을 환영합니다!]**(https://tristy.tistory.com/)  
+[**[트리스트의 알고리즘 노트에 오신 여러분을 환영합니다!]**](https://tristy.tistory.com/)  
 알고리즘은 언제나 날 괴롭혀 !
 
 
