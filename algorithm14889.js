@@ -1,4 +1,4 @@
-// 원동균 / 11066 / 파일 합치기
+// 원동균 / 14889 / 스타트와 링크
 "use strict";
 
 const { memory } = require("console");
@@ -75,40 +75,15 @@ ps.main(async () => {
   const result = [];
   const N = parseInt(await ps.readLine());
 
-  const dp = Array.from(Array(501), () => Array(501).fill(0));
-  const sum = Array.from(Array(501).fill(0));
+  const startLink = Array.from(Array(N).fill(0));
 
   for (let i = 0; i < N; i++) {
-    const K = parseInt(await ps.readLine());
-    const novel = (await ps.readLine())
+    const human = (await ps.readLine())
       .split(" ")
       .map((element) => parseInt(element));
 
-    for (let j = 1; j <= K; j++) {
-      sum[j] = sum[j - 1] + novel[j - 1];
-    }
-
-    result.push(combine(novel, K));
+    startLink.push(wine);
   }
 
-  for (const i of result) {
-    console.log(i);
-  }
-
-  function combine(novel, K) {
-    for (let i = 1; i < K; i++) {
-      for (let j = 1; i + j <= K; j++) {
-        dp[j][i + j] = Infinity;
-
-        for (let k = j; k < i + j; k++) {
-          dp[j][i + j] = Math.min(
-            dp[j][i + j],
-            dp[j][k] + dp[k + 1][i + j] + sum[i + j] - sum[j - 1]
-          );
-        }
-      }
-    }
-
-    return dp[1][K];
-  }
+  console.log(startLink);
 });
