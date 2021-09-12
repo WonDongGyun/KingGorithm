@@ -1,4 +1,4 @@
-// 원동균 / 14888 / 연산자 끼워넣기
+// 원동균 / 2836 / 수상 택시
 "use strict";
 
 const { memory } = require("console");
@@ -72,44 +72,47 @@ const ps = (function (process) {
 })(process);
 
 ps.main(async () => {
-  const N = parseInt(await ps.readLine());
-
-  const arr = (await ps.readLine())
-    .split(" ")
-    .map((element) => parseInt(element));
-  const opNumArr = (await ps.readLine())
+  const result = [];
+  const [N, M] = (await ps.readLine())
     .split(" ")
     .map((element) => parseInt(element));
 
-  const results = [];
+  const desti = [];
 
-  let max = -Infinity;
-  let min = Infinity;
+  for (let i = 0; i < N; i++) {
+    const back = (await ps.readLine())
+      .split(" ")
+      .map((element) => parseInt(element));
 
-  opDFS(opNumArr[0], opNumArr[1], opNumArr[2], opNumArr[3], 1, arr[0]);
+    if (back[0] > back[1]) {
+      desti.push(back);
+    }
+  }
+  desti.sort((a, b) => {
+    if (a[0] != b[0]) {
+      return b[0] - a[0];
+    }
+    return b[1] - a[1];
+  });
 
-  console.log(Math.max(...results));
-  console.log(Math.min(...results));
+  console.log(sweeping());
 
-  function opDFS(plus, minus, multi, divide, count, result) {
-    if (count === N) {
-      results.push(result);
+  function sweeping() {
+    let start = M + 1;
+    let end = M + 1;
+    let result = 0;
+    for (let i = 0; i < desti.length; i++) {
+      if (end > desti[i][0]) {
+        result += (start - end) * 2;
+        start = desti[i][0];
+      }
+
+      if (end > desti[i][1]) {
+        end = desti[i][1];
+      }
     }
 
-    if (plus > 0)
-      opDFS(plus - 1, minus, multi, divide, count + 1, result + arr[count]);
-    if (minus > 0)
-      opDFS(plus, minus - 1, multi, divide, count + 1, result - arr[count]);
-    if (multi > 0)
-      opDFS(plus, minus, multi - 1, divide, count + 1, result * arr[count]);
-    if (divide > 0)
-      opDFS(
-        plus,
-        minus,
-        multi,
-        divide - 1,
-        count + 1,
-        parseInt(result / arr[count])
-      );
+    result += (start - end) * 2;
+    return M + result;
   }
 });
