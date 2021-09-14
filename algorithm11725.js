@@ -1,4 +1,4 @@
-// 원동균 / 2836 / 수상 택시
+// 원동균 / 11725 / 트리의 부모 찾기
 "use strict";
 
 const { memory } = require("console");
@@ -72,47 +72,60 @@ const ps = (function (process) {
 })(process);
 
 ps.main(async () => {
-  const result = [];
-  const [N, M] = (await ps.readLine())
-    .split(" ")
-    .map((element) => parseInt(element));
+  const N = parseInt(await ps.readLine());
 
-  const desti = [];
+  // parent = 부모를 기록하는 배열
+  // stack = dfs를 위한 다음 경로 배열
+  // visit = 방문 기록 배열
+  // tree = 노드 배열
 
-  for (let i = 0; i < N; i++) {
-    const back = (await ps.readLine())
+  const parent = Array.from(Array(N).fill(0));
+  //   const stack = [];
+  const queue = [];
+  const visit = Array.from(Array(N).fill(false));
+  const tree = Array.from(Array(N), () => new Array());
+
+  for (let i = 0; i < N - 1; i++) {
+    const loc = (await ps.readLine())
       .split(" ")
       .map((element) => parseInt(element));
-
-    if (back[0] > back[1]) {
-      desti.push(back);
-    }
+    tree[loc[0] - 1].push(loc[1]);
+    tree[loc[1] - 1].push(loc[0]);
   }
-  desti.sort((a, b) => {
-    if (a[0] != b[0]) {
-      return b[0] - a[0];
-    }
-    return b[1] - a[1];
-  });
 
-  console.log(sweeping());
+  bfs(0);
 
-  function sweeping() {
-    let start = M + 1;
-    let end = M + 1;
-    let result = 0;
-    for (let i = 0; i < desti.length; i++) {
-      if (end > desti[i][0]) {
-        result += (start - end) * 2;
-        start = desti[i][0];
+  parent.shift();
+  let result = "";
+  parent.forEach((ans) => (result += ans + "\n"));
+  console.log(result);
+
+  // 1번 노드부터 시작하지만 배열은 0번부터 시작합니다.
+  //   function dfs(node) {
+  //     visit[node] = true;
+  //     for (let i = 0; i < tree[node].length; i++) {
+  //       if (!visit[tree[node][i] - 1]) {
+  //         stack.push(tree[node][i] - 1);
+  //         parent[tree[node][i] - 1] = node + 1;
+  //       }
+  //     }
+
+  //     if (stack.length < 1) {
+  //       return;
+  //     }
+  //     dfs(stack.pop());
+  //   }
+  function bfs(node) {
+    queue.push(node);
+    while (queue.length > 0) {
+      const next = queue.shift();
+      visit[next] = true;
+      for (let i = 0; i < tree[next].length; i++) {
+        if (!visit[tree[next][i] - 1]) {
+          queue.push(tree[next][i] - 1);
+          parent[tree[next][i] - 1] = next + 1;
+        }
       }
-
-      if (end > desti[i][1]) {
-        end = desti[i][1];
-      }
     }
-
-    result += (start - end) * 2;
-    return M + result;
   }
 });
