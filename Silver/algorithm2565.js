@@ -1,4 +1,4 @@
-// 원동균 / 2170 / 선 긋기
+// 원동균 / 2565 / 전깃줄
 "use strict";
 
 const { memory } = require("console");
@@ -73,48 +73,31 @@ const ps = (function (process) {
 
 ps.main(async () => {
   const N = parseInt(await ps.readLine());
-  const lineArr = [];
+  const elec = [];
   for (let i = 0; i < N; i++) {
-    lineArr.push(
+    elec.push(
       (await ps.readLine()).split(" ").map((element) => parseInt(element))
     );
   }
 
-  lineArr.sort((a, b) => {
-    if (a[0] != b[0]) {
-      return a[0] - b[0];
-    }
-    return a[1] - b[1];
-  });
+  elec.sort((a, b) => a[0] - b[0]);
+  const dp = Array.from(new Array(N).fill(1));
 
-  // 현재선이 이전선에 완전히 포함됨
-  // 현재선이 이전선에 일부만 포함되고, 더 긴 경우
-  // 현재선이 이전선에 아예 포함되지 않는 경우
-  const swipping = (lineArr) => {
-    let min = lineArr[0][0];
-    let max = lineArr[0][1];
-    let leng = max - min;
+  const LIS = (arr, dp) => {
+    let result = 1;
 
-    for (let i = 1; i < N; i++) {
-      // 선이 겹치는 경우는 거리 계산을 하지 않습니다.
-      if (min <= lineArr[i][0] && max >= lineArr[i][1]) {
-        continue;
-        // 두번째 조건에 min과 관련한 조건을 사용하면, 아예 포함되지 않는 경우를 제대로 찾을 수 없습니다.
-        // 첫번째 조건에 걸리지 않지만 선의 시작값이 이전의 max값보다 작다면, 현재선이 이전선에 일부만 포함되고, 더 긴 경우입니다.
-      } else if (lineArr[i][0] < max) {
-        leng += lineArr[i][1] - max;
-
-        // 첫번째, 두번째 조건에 걸리지 않는다면 현재선이 이전선에 아예 포함되지 않는 경우 입니다.
-      } else {
-        leng += lineArr[i][1] - lineArr[i][0];
+    for (let i = 0; i < N; i++) {
+      for (let j = 0; j < i; j++) {
+        if (arr[i][1] > arr[j][1]) {
+          // 줄이 안겹치기 위해서는 B 전봇대의 값이 더 커야 가능하다.
+          dp[i] = Math.max(dp[i], dp[j] + 1);
+        }
       }
-
-      max = lineArr[i][1];
-      min = lineArr[i][0];
+      result = Math.max(dp[i], result);
     }
 
-    return leng;
+    return result;
   };
 
-  console.log(swipping(lineArr));
+  console.log(N - LIS(elec, dp));
 });

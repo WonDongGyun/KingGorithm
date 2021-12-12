@@ -1,4 +1,4 @@
-// 원동균 / 2170 / 선 긋기
+// 원동균 / 18870 / 좌표 압축
 "use strict";
 
 const { memory } = require("console");
@@ -73,48 +73,33 @@ const ps = (function (process) {
 
 ps.main(async () => {
   const N = parseInt(await ps.readLine());
-  const lineArr = [];
-  for (let i = 0; i < N; i++) {
-    lineArr.push(
-      (await ps.readLine()).split(" ").map((element) => parseInt(element))
-    );
-  }
 
-  lineArr.sort((a, b) => {
-    if (a[0] != b[0]) {
-      return a[0] - b[0];
-    }
-    return a[1] - b[1];
-  });
+  const A = (await ps.readLine())
+    .split(" ")
+    .map((element) => parseInt(element));
 
-  // 현재선이 이전선에 완전히 포함됨
-  // 현재선이 이전선에 일부만 포함되고, 더 긴 경우
-  // 현재선이 이전선에 아예 포함되지 않는 경우
-  const swipping = (lineArr) => {
-    let min = lineArr[0][0];
-    let max = lineArr[0][1];
-    let leng = max - min;
+  const A_sort = Array.from(new Set(A.slice())).sort((a, b) => a - b);
 
-    for (let i = 1; i < N; i++) {
-      // 선이 겹치는 경우는 거리 계산을 하지 않습니다.
-      if (min <= lineArr[i][0] && max >= lineArr[i][1]) {
-        continue;
-        // 두번째 조건에 min과 관련한 조건을 사용하면, 아예 포함되지 않는 경우를 제대로 찾을 수 없습니다.
-        // 첫번째 조건에 걸리지 않지만 선의 시작값이 이전의 max값보다 작다면, 현재선이 이전선에 일부만 포함되고, 더 긴 경우입니다.
-      } else if (lineArr[i][0] < max) {
-        leng += lineArr[i][1] - max;
+  const compression = (loc) => {
+    let left = 0;
+    let right = A_sort.length - 1;
 
-        // 첫번째, 두번째 조건에 걸리지 않는다면 현재선이 이전선에 아예 포함되지 않는 경우 입니다.
+    while (left <= right) {
+      const mid = parseInt((left + right) / 2);
+
+      if (loc > A_sort[mid]) {
+        left = mid + 1;
+      } else if (loc < A_sort[mid]) {
+        right = mid - 1;
       } else {
-        leng += lineArr[i][1] - lineArr[i][0];
+        return mid;
       }
-
-      max = lineArr[i][1];
-      min = lineArr[i][0];
     }
-
-    return leng;
   };
 
-  console.log(swipping(lineArr));
+  const compress = A.map((element) => {
+    return compression(element);
+  });
+
+  console.log(compress.join(" "));
 });
