@@ -88,8 +88,10 @@ ps.main(async () => {
 
   opDFS(opNumArr[0], opNumArr[1], opNumArr[2], opNumArr[3], 1, arr[0]);
 
-  console.log(Math.max(...results));
-  console.log(Math.min(...results));
+  // -0으로 출력된다. 자바스크립트의 number가 실수형이라서 +0과 -0이 나온다고 합니다.
+  // 그래서 -0으로 출력되는걸 0으로 고치게 한 코드입니다. -0과 0은 같습니다. 하지만 정답이 아니라서 오류가 난거죠
+  console.log(Math.max(...results) === 0 ? 0 : Math.max(...results));
+  console.log(Math.min(...results) === 0 ? 0 : Math.min(...results));
 
   function opDFS(plus, minus, multi, divide, count, result) {
     if (count === N) {
