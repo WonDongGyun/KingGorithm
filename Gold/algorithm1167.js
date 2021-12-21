@@ -73,23 +73,53 @@ const ps = (function (process) {
 
 ps.main(async () => {
   const V = parseInt(await ps.readLine());
+  const vertax = Array.from(Array(V + 1), () => new Array());
 
-  const vertax = Array.from(Array(V + 1).fill(0), () => Array(V + 1).fill(0));
-  const stack = [];
-  let max = 0;
+  const dfs = (start) => {
+    // 방문 여부를 판단하며, 끝 정점까지 갈 수 있는 최대값을 구합니다.
+    const visited = Array(V + 1).fill(-1);
+    const deque = [start];
+    visited[start] = 0;
+
+    // [해당 정점까지 가는 가중치의 최대값, 정점]
+    let max = [0, 0];
+
+    while (deque.length != 0) {
+      // 출발할 정점
+      const go = deque.shift();
+
+      // 해당 정점에서 갈 수 있는 정점과 정점까지 이동하는 가중치
+      for (const [node, weight] of vertax[go]) {
+        // 방문하지 않았다면 수행
+        if (visited[node] == -1) {
+          visited[node] = visited[go] + weight;
+          deque.push(node);
+
+          if (max[0] < visited[node]) {
+            max = [visited[node], node];
+          }
+        }
+      }
+    }
+
+    return max;
+  };
 
   for (let i = 0; i < V; i++) {
     const dis = (await ps.readLine())
       .split(" ")
       .map((element) => parseInt(element));
 
-    for (let j = 1; j < dis.length; j++) {
-      if (j % 2 !== 0 && dis[j] !== -1) {
-        vertax[dis[0]][dis[j]] = dis[j + 1];
-      }
+    for (let j = 1; j < dis.length - 1; j += 2) {
+      vertax[dis[0]].push([dis[j], dis[j + 1]]);
     }
   }
-  console.log(vertax);
 
-  function dfs() {}
+  // 해당 문제의 그래프는 모든 정점이 전부 이어져 있는 그래프입니다.
+  // 첫번째 dfs에서 임의의 정점에서 어떤 정점까지 가는 최대 거리를 구합니다.
+  /* 하지만 한번만 진행하면 해당 노드 까지의 거리가 최대 거리 값임을 보장할 수 없기 때문에
+   해당 정점에서 다시 한번 더 bfs를 진행하여 해당 정점에서 멀리 있는 정점을 찾아나갑니다. */
+  const result = dfs(dfs(1)[1])[0];
+
+  console.log(result);
 });
