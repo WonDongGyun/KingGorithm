@@ -75,15 +75,16 @@ ps.main(async () => {
   const T = parseInt(await ps.readLine());
   let result = "";
 
+  // unshift, pop을 사용하면 시간 초과가 발생합니다.
+
   const bps = (A, B) => {
     const queue = [];
-    const visited = Array(10000);
-    for (var i = 0; i < 10000; ++i) visited[i] = false;
+    const visited = Array(10000).fill(false);
 
-    queue.unshift([A, ""]);
+    queue.push([A, ""]);
 
     while (queue.length > 0) {
-      const [before, command] = queue.push();
+      const [before, command] = queue.shift();
       visited[before] = true;
 
       if (before === B) return command;
@@ -93,25 +94,25 @@ ps.main(async () => {
       let after = 0;
       after = (2 * before) % 10000;
       if (!visited[after]) {
-        queue.unshift([after, command + "D"]);
+        queue.push([after, command + "D"]);
         visited[after] = true;
       }
 
-      after = before - 1 === 0 ? 9999 : before - 1;
+      after = before === 0 ? 9999 : before - 1;
       if (!visited[after]) {
-        queue.unshift([after, command + "S"]);
+        queue.push([after, command + "S"]);
         visited[after] = true;
       }
 
       after = (before % 1000) * 10 + parseInt(before / 1000);
       if (!visited[after]) {
-        queue.unshift([after, command + "L"]);
+        queue.push([after, command + "L"]);
         visited[after] = true;
       }
 
       after = (before % 10) * 1000 + parseInt(before / 10);
       if (!visited[after]) {
-        queue.unshift([after, command + "R"]);
+        queue.push([after, command + "R"]);
         visited[after] = true;
       }
     }
