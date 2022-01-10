@@ -1,4 +1,4 @@
-// 원동균 / 9465 / 스티커
+// 원동균 / 5338 / 마이크로소프트 로고
 "use strict";
 
 const { memory } = require("console");
@@ -72,44 +72,9 @@ const ps = (function (process) {
 })(process);
 
 ps.main(async () => {
-  const T = parseInt(await ps.readLine());
-  let result = "";
-
-  for (let i = 0; i < T; i++) {
-    const col = parseInt(await ps.readLine());
-    const sticker = [];
-    const dp = Array.from(Array(2), () => new Array(col).fill(0));
-
-    for (let j = 0; j < 2; j++) {
-      sticker.push((await ps.readLine()).split(" ").map((el) => parseInt(el)));
-    }
-
-    dp[0][0] = sticker[0][0];
-    dp[1][0] = sticker[1][0];
-
-    if (col === 1) {
-      result += `${Math.max(dp[0][0], dp[1][0])}\n`;
-      continue;
-    }
-
-    if (col >= 2) {
-      dp[0][1] = dp[1][0] + sticker[0][1];
-      dp[1][1] = dp[0][0] + sticker[1][1];
-
-      if (col === 2) {
-        result += `${Math.max(dp[0][1], dp[1][1])}\n`;
-        continue;
-      }
-
-      for (let j = 2; j <= col; j++) {
-        dp[0][j] = sticker[0][j] + Math.max(dp[1][j - 1], dp[1][j - 2]);
-        dp[1][j] = sticker[1][j] + Math.max(dp[0][j - 1], dp[0][j - 2]);
-      }
-
-      result += `${Math.max(dp[0][col - 1], dp[1][col - 1])}\n`;
-      continue;
-    }
-  }
-
-  console.log(result);
+  console.log("       _.-;;-._");
+  console.log("'-..-'|   ||   |");
+  console.log("'-..-'|_.-;;-._|");
+  console.log("'-..-'|   ||   |");
+  console.log("'-..-'|_.-''-._|");
 });
